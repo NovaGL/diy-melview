@@ -85,9 +85,10 @@ If it shows "COMM" that means there is a communication error and the command won
 
 | parameter | type | definition |
 |---|---|---|
-| mode | *string* |  mode ('MD' 1 - HEAT, 3 - Cooling, 8 - 'auto') |
+| mode | *string* |  mode ('MD' 1 - HEAT, 2 - DRY, 3 - Cooling, 7 - FAN, 8 - 'auto') |
 | fanSpeed | *string* |  fan speed ('FS' 1-5)|
 | power | *string* | current power mode (PW1 - 'on', PW0 - 'off') |
+| zone | *string* | zone power mode (Z[0-8] 1 - 'on', Z[0-8] 0 - 'off') |
 | setTemperature | *string* | target temperature 'TS' float |
 
 ### Closing notes
