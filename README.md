@@ -59,6 +59,21 @@ Output
 	}
 ]
 ```
+### Unit Capabilities
+
+To find out what the unit is capable of you need to send the command to 
+https://api.melview.net/api/unitcapabilities.aspx
+
+This is useful for several reasons. It tells you if it supports functions such as swing.
+The minimum and maximum temperatures per preset which can be useful for error handling and localip which is good for 
+issuing local commands.
+
+An example to get a room's capabilities would be
+```
+  {
+    "unitid":"123"
+  };
+```
 ### Actions
 
 Now we have all the information we need to send and action to a unit.
@@ -71,7 +86,7 @@ We need three things to build the command.
 The unitid which we retrieved above. The API version, which is currently 2 and the command we want to send.
 
 Refer to the below table for commands.
-An example to turn off a unit would be
+An example to turn off a unit would be:
 ```
   {
     "unitid":"123",
@@ -79,6 +94,9 @@ An example to turn off a unit would be
     "commands":"PW0"
   };
 ```
+
+If you are operating this over LAN you can also add the parameter ``"lc":1`` this wil send commands immediately to the unit.
+
 It is important to validate your message before sending it out. 
 You don't want to set a room to 99 degrees also. Look out for the "status" field inn the room response.
 If it shows "COMM" that means there is a communication error and the command won't get processed.
@@ -86,10 +104,28 @@ If it shows "COMM" that means there is a communication error and the command won
 | parameter | type | definition |
 |---|---|---|
 | mode | *string* |  mode ('MD' 1 - HEAT, 2 - DRY, 3 - Cooling, 7 - FAN, 8 - 'auto') |
-| fanSpeed | *string* |  fan speed ('FS' 1-5)|
+| fanSpeed | *string* |  fan speed ('FS' 2 - LOW, 3 - MID, 5 - HIGH, 0 - AUTO)|
 | power | *string* | current power mode (PW1 - 'on', PW0 - 'off') |
 | zone | *string* | zone power mode (Z[0-8] 1 - 'on', Z[0-8] 0 - 'off') |
 | setTemperature | *string* | target temperature 'TS' float |
+
+### Local Commands
+If you passed the parameter ``"lc":1`` you would get a lc key in the response this is used to send the command directly to the unit.
+
+Using the localip we got in the unitcapabilites.aspx send an XML message to the local unit:
+http://localip/smart
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<CSV>
+	<CONNECT>ON</CONNECT>
+	<CODE>
+		<VALUE>{LC KEY}</VALUE>
+	</CODE>
+</CSV>
+```
+
+This should show instantly on your local unit.
 
 ### Closing notes
 This is not a definitive list of everything that can be done via MelView.
