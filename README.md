@@ -10,10 +10,19 @@ The body of your request has to contain the following values.
 ```{
 	"user": "my@email",
 	"pass": "mypass",
-	"appversion": "3.0.539"
+	"appversion": "3.2.627"
 }
 ```
-The response should be something like this
+
+You should also supply the following header. 
+Find your user-agent here http://www.useragentstring.com/
+
+```{
+ "User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0"
+}
+```
+
+The response should contain a cookie object (in node-red this is under msg.responseCookies.auth)
 `auth=XXXX; domain=.melview.net; expires=Mon, 09-Oct-2017 08:26:57 GMT; path=/"`
 The auth is the information we need but it is important to know the expiry so we need request a new cookie before that date.
 
