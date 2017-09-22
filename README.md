@@ -11,7 +11,7 @@ The body of your request has to contain the following values.
 {
 	"user": "my@email",
 	"pass": "mypass",
-	"appversion": "3.2.627"
+	"appversion": "3.2.632"
 }
 ```
 
