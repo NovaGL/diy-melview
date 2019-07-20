@@ -11,7 +11,7 @@ The body of your request has to contain the following values.
 {
 	"user": "my@email",
 	"pass": "mypass",
-	"appversion": "3.2.632"
+	"appversion": "4.3.1010"
 }
 ```
 
@@ -24,6 +24,19 @@ Find your user-agent here http://www.useragentstring.com/
 }
 ```
 
+An example of a cURL command would be the following:
+
+```curl
+curl -X POST \
+  https://api.melview.net/api/login.aspx \  
+  -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \  
+  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36' \
+  -d '{
+	"user": "my@email",
+	"pass": "mypass",
+	"appversion": "4.3.1010"
+}'
+```
 The response should contain a cookie object (in node-red this is under msg.headers["set-cookie"][0])
 `auth=XXXX; domain=.melview.net; expires=Mon, 09-Oct-2017 08:26:57 GMT; path=/"`
 The auth is the information we need but it is important to know the expiry so we need request a new cookie before that date.
@@ -35,6 +48,15 @@ https://api.melview.net/api/rooms.aspx
 
 Make sure when you POST to the above address that the header has the cookie in it.
 `‘Cookie’: [auth cookie]`
+
+An example cURL command would be 
+```curl
+curl -X POST \
+  https://api.melview.net/api/rooms.aspx \
+  -H 'Accept: application/json, text/javascript, */*; q=0.01' \
+  -H 'Cookie: auth=XXX' \
+  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36' \
+```  
 
 This will return all the current rooms and their current state.
 If you have multiple rooms it might be useful to loop through them and store them individually.
@@ -119,6 +141,27 @@ If it shows "COMM" that means there is a communication error and the command won
 | power | *string* | current power mode (PW1 - 'on', PW0 - 'off') |
 | zone | *string* | zone power mode (Z[0-8] 1 - 'on', Z[0-8] 0 - 'off') |
 | setTemperature | *string* | target temperature 'TS' float |
+
+### Group Actions
+It is also possible to send a command to multiple devices, currently the only group supported is all devices or a building.
+
+We send the POST command to https://api.melview.net/api/groupcommand.aspx
+The body of the request is the action we want to perform.
+We need two things to build the command.
+The group which should be 0 (or the buildingid from the romms output) and the command we want to send.
+
+Refer to the below table for commands.
+An example to turn off all units would be:
+```
+  {
+    "group":"0",
+    "commands":"PW0"
+  };
+```
+
+| parameter | type | definition |
+|---|---|---|
+| power | *string* | current power mode (PW1 - 'on', PW0 - 'off') |
 
 ### Local Commands
 If you passed the parameter ``"lc":1`` you would get a lc key in the response this is used to send the command directly to the unit.
