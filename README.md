@@ -94,19 +94,22 @@ Output
 ```
 ### Unit Capabilities
 
-To find out what the unit is capable of you need to send the command to 
+To find out what the unit is capable of you need to send a POST command to following URL.
 https://api.melview.net/api/unitcapabilities.aspx
 
-This is useful for several reasons. It tells you if it supports functions such as swing.
-The minimum and maximum temperatures per preset which can be useful for error handling and localip which is good for 
-issuing local commands.
-
-An example to get a room's capabilities would be
+You need to include the unit id in the body of the request which you retrieved above.
 ```
   {
     "unitid":"123"
   };
 ```
+
+This is useful for several reasons. It tells you if it supports functions such as swing.
+The minimum and maximum temperatures per preset which can be useful for error handling and localip which is good for 
+issuing local commands.
+
+Standy 0 or 1 indicates the compressor operation. "1" being compressor de-activated and "0" being compressor activated.
+
 ### Actions
 
 Now we have all the information we need to send and action to a unit.
@@ -116,7 +119,7 @@ As above we need to provide the cookie in the header of the command.
 We send the command to https://api.melview.net/api/unitcommand.aspx
 The body of the request is the action we want to perform.
 We need three things to build the command.
-The unitid which we retrieved above. The API version, which is currently 2 and the command we want to send.
+The unitid which we retrieved above, the verbosity of the response (just leave it as 2) and the command we want to send.
 
 Refer to the below table for commands.
 An example to turn off a unit would be:
